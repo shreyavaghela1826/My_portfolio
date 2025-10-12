@@ -1,0 +1,491 @@
+z<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Narendra Vaniya's Portfolio</title>
+    <style>
+        /* General Styling */
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #0a0a1a;
+            color: #000000;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        /* Canvas for 3D Scene */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            outline: none;
+            z-index: -1; /* Place canvas behind content */
+        }
+
+        /* Content Sections */
+        .content-section {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start; /* Align text to the left */
+            height: 100vh;
+            padding: 0 10%;
+            box-sizing: border-box;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .content-section > div {
+            background-color: rgba(10, 10, 26, 0.5);
+            backdrop-filter: blur(5px);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        .content-section h1, .content-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .content-section h1 {
+            font-size: 4rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .tagline {
+            font-size: 1.5rem;
+            color: #FFD700;
+            margin-bottom: 2rem;
+        }
+
+        .content-section h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-section p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            max-width: 500px;
+        }
+
+        .skills-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .skills-list li {
+            background-color: #ffffff;
+            color: #000000;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #FFD700;
+            font-weight: 500;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .skills-list li:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(10, 10, 26, 0.5);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: #e0e0e0;
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+        }
+
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar li {
+            margin: 0 1rem;
+        }
+
+        .navbar a {
+            color: #e0e0e0;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            color: #FFD700;
+        }
+
+        /* Footer Styling */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(10, 10, 26, 0.5);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .footer p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #e0e0e0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+            }
+            .navbar ul {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: rgba(10, 10, 26, 0.9);
+                padding: 1rem 0;
+            }
+            .navbar ul.show {
+                display: flex;
+            }
+            .navbar li {
+                margin: 0.5rem 0;
+            }
+            .content-section {
+                padding: 0 5%;
+            }
+            .content-section h1 {
+                font-size: 2.5rem;
+            }
+            .tagline {
+                font-size: 1.2rem;
+            }
+            .content-section h2 {
+                font-size: 2rem;
+            }
+            .content-section p {
+                max-width: 100%;
+            }
+            .skills-list {
+                justify-content: flex-start;
+            }
+            .footer p {
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar li {
+                margin: 0 0.25rem;
+            }
+            .navbar a {
+                font-size: 0.9rem;
+            }
+            .content-section h1 {
+                font-size: 2rem;
+            }
+            .tagline {
+                font-size: 1rem;
+            }
+            .content-section h2 {
+                font-size: 1.5rem;
+            }
+            .content-section p {
+                font-size: 1rem;
+            }
+            .skills-list li {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+    </style>
+    <!-- Import Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <nav class="navbar">
+        <div class="hamburger">☰</div>
+        <ul id="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#education">Education</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section id="home" class="content-section">
+            <div>
+                <h1>Shreya Vaghela</h1>
+                <p class="tagline">Full-Stack Developer | AI Enthusiast</p>
+                <p>Developing user centric applications that merge educational technology with intelligent systems.</p>
+            </div>
+        </section>
+
+        <section id="about" class="content-section">
+            <div>
+                <h2>About Me</h2>
+                <p>I am a developer with a Bachelor's degree in IT (Data Management) and a strong interest in Artificial Intelligence. My primary focus is on building full-stack applications from concept to deployment. I created "Code Yatra," an educational platform to teach programming, and I am driven to create efficient, user centric solutions.</p>
+            </div>
+        </section>
+
+        <section id="skills" class="content-section">
+            <div>
+                <h2>Core Skills</h2>
+                <p>Here are some of the technologies I specialize in:</p>
+                <ul class="skills-list">
+                    <li>Python</li>
+                    <li>Artificial Intelligence & Machine Learning</li>
+                    <li>Full-Stack Web Development (Frontend)(Backend)</Front-end></li>
+                    <li>Data & Visualization</li>
+                    <li>Cloud Services (AWS)</li>
+                    <li>JavaScript</li>
+                    <li>React</li>
+                    <li>Node.js</li>
+                    <li>HTML & CSS</li>
+                    <li>FinTech Principles</li>
+                    
+                </ul>
+            </div>
+        </section>
+
+        <section id="projects" class="content-section">
+            <div>
+                <h2>Projects</h2>
+                <p>Explore some of my recent projects that showcase my skills in full-stack development and AI integration.</p>
+                <ul class="skills-list">
+                    <li>Project 1: Code Yatra (Educational Platform) (Live application)
+                        <p>Code Yatra is an educational platform designed to share knowledge and document my journey in technology. As a co-creator of this project, my goal was to build a clean, organized, and visually appealing space to present complex programming topics in an accessible way. Live Site: <a href="https://code-yatra-pi.vercel.app" target="_blank">https://code-yatra-pi.vercel.app</a></p>
+                    </li>
+                    <li>Project 2: Student_grievance_system</li>
+                    <li>Project 3: MERN-stack-Star_Academy_System</li>
+                    <li>Project 4: Credit_risk_management</li>
+                    <li>Project 5: Banking_application</li>
+
+                </ul>
+            </div>
+        </section>
+
+        <section id="education" class="content-section">
+            <div>
+                <h2>Education</h2>
+                <p>My academic background in IT field.</p>
+                <ul class="skills-list">
+                    <li>Bachelor of Science in Information Technology (Data Management) - Gujarat University, India (Sep 2021 - Jul 2024)</li>
+                   
+                </ul>
+            </div>
+        </section>
+
+        <section id="experience" class="content-section">
+            <div>
+                <h2>Experience</h2>
+                <p>A timeline of my professional journey in development and tech.</p>
+                <ul class="skills-list">
+                    <li>Python Developer - Tridhya Tech Limited (Dec 2023 - May 2024 )</li>
+                    <li>Code Yatra (Personal Project) (Aug 2025 - Present)</li>
+                    
+                </ul>
+            </div>
+        </section>
+
+        <section id="contact" class="content-section">
+            <div>
+                <h2>Contact</h2>
+                <p>Let's connect! Reach out to me for collaborations or opportunities.</p>
+                <p>Email: <a href="mailto:shreyavaghela1826@gmail.com">shreyavaghela1826@gmail.com</a></p>
+                <p>LinkedIn: <a href="https://www.linkedin.com/in/shreyavaghela65" target="_blank">Shreya Vaghela</a></p>
+                <p>GitHub: <a href="https://github.com/shreyavaghela1826" target="_blank">Shreya Vaghela</a></p>
+            </div>
+        </section>
+
+        
+
+        
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 Shreya Vaghela</p>
+    </footer>
+
+    <!-- Import Three.js and GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js"></script>
+
+    <script type="module">
+        // Register GSAP Plugin
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Scene Setup
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xffffff); // Set white background for 3D scene
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({
+            canvas: document.querySelector('#bg-canvas'),
+            antialias: true,
+            alpha: true // Make canvas transparent
+        });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+        const pointLight = new THREE.PointLight(0xffd700, 1, 100);
+        pointLight.position.set(0, 3, 5);
+        scene.add(pointLight);
+
+        
+
+        // "Coding" Particle Animation with Round Particles
+        const particleCount = 5000;
+        const particlesGeometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(particleCount * 3);
+
+        for (let i = 0; i < particleCount * 3; i++) {
+            positions[i] = (Math.random() - 0.5) * 10;
+        }
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+        // Create round particle texture
+        const canvas = document.createElement('canvas');
+        canvas.width = 32;
+        canvas.height = 32;
+        const context = canvas.getContext('2d');
+        context.beginPath();
+        context.arc(16, 16, 16, 0, Math.PI * 2);
+        context.fillStyle = '#FFD700';
+        context.fill();
+
+        const particleTexture = new THREE.CanvasTexture(canvas);
+        const particlesMaterial = new THREE.PointsMaterial({
+            color: 0xffd700,
+            size: 0.02,
+            sizeAttenuation: true,
+            map: particleTexture,
+            transparent: true,
+            alphaTest: 0.1
+        });
+        const codingParticles = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(codingParticles);
+
+        // Animation Loop
+        const clock = new THREE.Clock();
+        const tick = () => {
+            const elapsedTime = clock.getElapsedTime();
+            
+            // Animate coding particles
+            codingParticles.rotation.y = elapsedTime * 0.05;
+            
+            renderer.render(scene, camera);
+            requestAnimationFrame(tick);
+        };
+        tick();
+
+        // GSAP Scroll-based Animations
+        const tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: 'main',
+                start: 'top top',
+                end: 'bottom bottom',
+                scrub: 1,
+            }
+        });
+
+        // Initial camera position
+        camera.position.set(0, 2, 8);
+
+        // Section 1: Home
+        tl.to(camera.position, { x: 0, y: 1, z: 5 }, 0);
+
+        // Section 2: About
+        tl.to(camera.position, { x: -2.5, y: 1.5, z: 3.5 }, 1);
+        tl.to(camera.rotation, { y: -Math.PI / 8 }, 1);
+
+        // Section 3: Skills
+        tl.to(camera.position, { x: 0, y: 0.8, z: 3.5 }, 2);
+        tl.to(camera.rotation, { y: 0 }, 2);
+
+        // Section 4: Projects
+        tl.to(camera.position, { x: 2.5, y: 1, z: 4 }, 3);
+        tl.to(camera.rotation, { y: Math.PI / 8 }, 3);
+
+        // Section 5: Contact
+        tl.to(camera.position, { x: 0, y: 1.2, z: 3 }, 4);
+        tl.to(camera.rotation, { y: 0 }, 4);
+
+        // Section 6: Education
+        tl.to(camera.position, { x: -1, y: 0.5, z: 4.5 }, 5);
+        tl.to(camera.rotation, { y: -Math.PI / 12 }, 5);
+
+        // Section 7: Experience
+        tl.to(camera.position, { x: 1, y: 0.8, z: 3.5 }, 6);
+        tl.to(camera.rotation, { y: Math.PI / 12 }, 6);
+
+        // Window Resize Handler
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        });
+
+    </script>
+
+    <script>
+        // Hamburger menu toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('#nav-links');
+
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('show');
+        });
+    </script>
+</body>
+</html>
